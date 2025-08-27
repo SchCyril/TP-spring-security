@@ -2,12 +2,13 @@ package fr.diginamic.tpuserspringsecurity.controllers;
 
 import fr.diginamic.tpuserspringsecurity.entities.UserApp;
 import fr.diginamic.tpuserspringsecurity.services.CustomUserDetailsService;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@RestController
+@Controller
 public class UserAppController {
 
 
@@ -17,17 +18,14 @@ public class UserAppController {
         this.customUserDetailsService = customUserDetailsService;
     }
 
+
+
     @PostMapping("/register-user")
-    public String registerUser(@ModelAttribute UserApp userApp) {
-        customUserDetailsService.createUser(
-                userApp.getEmail(),
-                userApp.getPassword()
-        );
-        return "Utilisateur " + userApp.getEmail() + " crée";
+    public String registerUser(@ModelAttribute UserApp userApp, RedirectAttributes redirectAttributes) {
+        customUserDetailsService.createUser(userApp.getEmail(), userApp.getPassword());
+        redirectAttributes.addFlashAttribute("message", "Utilisateur " + userApp.getEmail() + " créé !");
+        return "redirect:/registerUser-success";
     }
 
-//    @GetMapping
-//    public List<UserApp> findAll() {
-//        return userAppRepository.findAll();
-//    }
+
 }

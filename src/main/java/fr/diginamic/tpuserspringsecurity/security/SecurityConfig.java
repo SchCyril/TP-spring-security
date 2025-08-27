@@ -7,8 +7,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -29,19 +27,15 @@ public class SecurityConfig {
         http
                 // Autorisation des endpoints
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/h2-console/**",
-                                "/articles/list",
-                                "/login",
-                                "/register-user"
-                        ).permitAll()
+                        .requestMatchers("/registerUser**",
+                                "/login").permitAll()
                         .anyRequest().authenticated() // le reste nécessite une authentification
                 )
 
                 // Form login comme TP2
                 .formLogin(form -> form
-                        .loginPage("/login")  // page de login custom
-                        .permitAll()
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/hello", false)
                 );
 
         // Pour permettre H2 Console (désactiver CSRF + frameOptions)

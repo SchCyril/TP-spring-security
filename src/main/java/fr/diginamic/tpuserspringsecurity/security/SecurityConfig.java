@@ -28,7 +28,8 @@ public class SecurityConfig {
                 // Autorisation des endpoints
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/registerUser**",
-                                "/login").permitAll()
+                                "/login",
+                        "/get-cookie").permitAll()
                         .anyRequest().authenticated() // le reste nécessite une authentification
                 )
 
